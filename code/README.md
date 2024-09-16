@@ -1,4 +1,4 @@
-##Code
+#Code
 
 * We use Python as the programming language.
 * There are detailed comments in the code for
