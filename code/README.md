@@ -1,4 +1,4 @@
-#Code
+# README for cv_ar.ipynb
 In this .ipynb file, we conduct cross validation methods on stationary AR(p) time series data to see if the CV error on current dataset can well approximate true prediction error on future dataset. We use Python as the programming language. There are detailed comments in the code for explanation. We compare different CV methods with Out-Of-Sample evaluation. Python packages used: 
 * numpy
 * pandas
