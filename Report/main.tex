@@ -320,7 +320,7 @@ Exploring the use of cross-validation (CV) for multi-step-ahead predictions in t
 \section{Project report}
 The extension project involves adding regularization techniques to the CV procedure. We introduce the \textbf{Lasso Regression} to AR models, and evaluate the performances when using different CV and other methods. Adapting Lasso regression in time series modeling is not new. Wang et al. \citep{Wang} studies the linear regression with auto-regressive errors adapting Lasso procedure with a fixed order. In our project, adding the use of Lasso regression, would help to assess how regularization affects the bias-variance trade-off in cross-validation strategies. Moreover, we compare the performances of different CV methods, including the blocked-CV. The simulations are done in Python. 
 
-\subsection{Theoretical Aspects}
+\subsection{Theoretical Aspect}
 Adding a Lasso term, which imposes an $L1$ regularization penalty, to the objective function seems likely to affect the proof of Theorem 1 (since it changes the objective function), but not necessarily in a negative way. Let's consider the same sets of observation data from stationary process as in equation (\ref{eq1}) and equation (\ref{eq3}). Now the objective function in equation (\ref{eq2}) becomes 
 $$Q(\theta) = \sum^n_{t=1} (y_t - g(x_t, \theta))^2 + \alpha \sum |\theta_i|
 $$ 
