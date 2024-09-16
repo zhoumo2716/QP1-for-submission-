@@ -7,9 +7,9 @@ In this .ipynb file, we conduct cross validation methods on stationary AR(p) tim
 * sklearn
 
 Here are the functions built: 
-* generate_stationary_ar_coefficients (not efficient)
+* _generate_stationary_ar_coefficients_ (not efficient)
 It generates the coefficient values for stationary AR(p) models. It firstly generates random coefficient values and then check if the roots of the characteristic poly lie outside of unit circle. 
-* generate_stationary_ar_coefficients_from_roots (efficient)
+* _generate_stationary_ar_coefficients_from_roots_ (efficient)
 It generates the coefficient values for stationary AR(p) models. It firstly generates roots of the characteristic poly that lie outside of unit circle, and then generates the coefficient values. 
 * generate_ar_process
 It generates a time series dataset with given AR(p) model and given length. 
