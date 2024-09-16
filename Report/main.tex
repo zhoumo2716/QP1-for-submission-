@@ -32,6 +32,11 @@
 \newtheorem{conj}[thm]{Conjecture}
 \newtheorem{quest}[thm]{Question}
 
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{customthm}[1]
+  {\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
 \theoremstyle{definition}
 \newtheorem{defn}[thm]{Definition}
 \newtheorem{defns}[thm]{Definitions}
@@ -139,7 +144,14 @@ The errors are MDS:
 
 Note that due to stationarity of $\{y_t\}^n_{t=1}$, conditions for the consistency of $\hat{\theta}$ and $\hat{\theta_{-t}}$ are equivalent. In short, we want to make sure that the time series model is stationary, the estimator is consistent, and the errors are uncorrelated.  \\
 
-The theoretical validity is carried out by proving that $\hat{PE} \xrightarrow[]{approx.} PE$. By expanding the prediction error into integral form, we have
+The theoretical validity is carried out by proving the following theorem. 
+
+\begin{customthm}{1}\label{thm1}
+Suppose that Assumptions \ref{assump1}-\ref{assump3} hold, then we have $\hat{PE} \xrightarrow[]{approx.} PE$. 
+\end{customthm}
+\begin{proof}
+    
+By expanding the prediction error into integral form, we have
 $$PE = \int (\Tilde{y} - g(\Tilde{x},\hat{\theta}))^2 d\Tilde{F_m}$$
 where $\Tilde{F_m}$ is the distribution of the process generating $\{\Tilde{y_t}\}^m_{t=1}$. Suppose the true model is $\Tilde{y} = g(\Tilde{x}, \theta) + \Tilde{\epsilon}$, where $g(\Tilde{x}, \theta)$ represents the true underlying relationship between $\Tilde{x}$ and $\Tilde{y}$, and $\Tilde{\epsilon}$ is the noise. By substituting for $\Tilde{y}$, we have 
 $$PE = \int \left( g(\Tilde{x}, \theta) + \Tilde{\epsilon} - g(\Tilde{x},\hat{\theta}) \right)^2 d\Tilde{F_m}$$ By expanding the squared terms and simplification, we have 
@@ -169,7 +181,6 @@ where $F_n$ is the distribution of the process generating $\{y_t\}^n_{t=1}$. Not
    \frac{1}{n-p}\sum_{t=p+1}^n \left( E[g(x_t, \hat{\theta_{-t}})] - g(x_t, \hat{\theta_{-t}}) \right)^2 \xrightarrow{Approxi.} \int \left(E[g(\Tilde{x}, \hat{\theta})] - g(\Tilde{x},\hat{\theta})\right)^2 d\tilde{F_m} 
 \end{equation}
 
-
 The key takeaway here is that, ultimately, the variance of $PE$ across different training data realizations can be approximated by the variance of $\hat{PE}$ across different training data realizations when the number of data gets very big. When $n, m$ becomes big, let $N = max \{n, m\}$, and let $\epsilon^E_t(\hat{\theta_{-t}}) = E[g(x_t, \hat{\theta_{-t}})] - g(x_t,\hat{\theta_{-t}}), \tilde{\epsilon}^E_t(
 \hat{\theta}
 ) = E[g(\Tilde{x_t}, \hat{\theta})] - g(\Tilde{x_t},\hat{\theta})$, we can write the left term in equation \ref{equation6} as
@@ -177,6 +188,8 @@ $$  \frac{1}{N-p} \sum_{t=p+1}^N  \left( \epsilon^E_t(\theta_{-t}) \right)^2$$an
 Our proof is complete if we can show that, as $n$ grows big
 $$E\left[ \sum_{t=p+1}^N \sum_{j=p+1}^N  \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta}) - \sum_{t=p+1}^N  \left( \epsilon^E_t(\theta_{-t}) \right)^2 \right] \rightarrow 0 $$ 
 which follows by Lemma \ref{lemma1}. 
+\end{proof}
+
 \newtheorem{lemma}{Lemma}
 \begin{lemma}\label{lemma1}
     Suppose that \textbf{Assumptions \ref{assump1}-\ref{assump3}} hold. Then, there exists an arbitrarily small constant c \textgreater 0 such that $$E \left[  \sum_{t=p+1}^N \sum_{j=p+1}^N   \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta}) - \sum_{t=p+1}^N  \left( \epsilon^E_t(\theta_{-t}) \right)^2 \right] \leq cN^4$$
@@ -234,7 +247,7 @@ Alternatively, we can understand the proof from the perspective of the Glivenko-
 \subsection{Generalization of Theorem 1}
 Notice that in the proof, we did not rely on any specific properties of the AR(p) model itself. Instead, what truly matters in the \textbf{Assumption \ref{assump1}} are the stationarity of the process and the alpha-mixing condition. \textbf{Assumption \ref{assump2}} ensures us that we have a consistent estimator for the coefficients term. And \textbf{Assumption \ref{assump3}} (error terms form a martingale difference sequence) plays an important role in the proof as mentioned before. Both \textbf{Assumption \ref{assump2} and \ref{assump3}} do not depend on any specific features of the AR(p) model, they can be extended to a wide range of time series models. \\
 
-Therefore, since the proof fundamentally depends on these general conditions, and not on the structure of AR(p) models, we can extend it to a more general setting. This includes not just linear or nonlinear AR models, but any nonlinear time series models that meet the new assumption (\textbf{Assumption \ref{assump4}}). By generalizing \textbf{Assumption 1}, we can apply the results of the cross-validation (CV) procedure beyond just the auto-regressive (AR) models, as long as certain conditions are met.
+Therefore, since the proof for \textbf{Theorem \ref{thm1}} fundamentally depends on these general conditions, and not on the structure of AR(p) models, we can extend it to a more general setting. This includes not just linear or nonlinear AR models, but any nonlinear time series models that meet the new assumption (\textbf{Assumption \ref{assump4}}). By generalizing \textbf{Assumption 1}, we can apply the results of the cross-validation (CV) procedure beyond just the auto-regressive (AR) models, as long as certain conditions are met. 
 
 \begin{assumption}\label{assump4}
     The generalized version of \textbf{Assumption 1} for a general nonlinear time series model can be stated as:
@@ -244,7 +257,9 @@ Therefore, since the proof fundamentally depends on these general conditions, an
     \item \textbf{Correct Model Specification}: The model used for cross-validation must be correctly specified, meaning it reflects the true data-generating process and doesn't introduce bias due to misspecification.
 \end{enumerate}
 \end{assumption}
-The martingale difference property for the error term in \textbf{Assumption \ref{assump3}} ensures that the errors are uncorrelated over time, which is important for the consistency and convergence of the cross-validation error estimates. \textbf{Model being misspecified} would cause correlations in the error term and therefore we add this to the adjusted version of \textbf{Assumption \ref{assump1}}, i.e., \textbf{Assumption \ref{assump4}}.
+The martingale difference property for the error term in \textbf{Assumption \ref{assump3}} ensures that the errors are uncorrelated over time, which is important for the consistency and convergence of the cross-validation error estimates. \textbf{Model being misspecified} would cause correlations in the error term and therefore we add this to the adjusted version of \textbf{Assumption \ref{assump1}}, i.e., \textbf{Assumption \ref{assump4}}. \\
+
+In summary, with \textbf{Assumptions \ref{assump2}-\ref{assump4}} (new assumptions refining the original Assumption \ref{assump1}), we now generalize \textbf{Theorem \ref{thm1}} to apply not only to AR(P) models but to any non-linear time series models.
 
 
 \subsection{Monte Carlo Simulation and Results}
