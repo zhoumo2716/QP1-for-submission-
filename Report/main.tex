@@ -144,7 +144,7 @@ The errors are MDS:
 
 Note that due to stationarity of $\{y_t\}^n_{t=1}$, conditions for the consistency of $\hat{\theta}$ and $\hat{\theta_{-t}}$ are equivalent. In short, we want to make sure that the time series model is stationary, the estimator is consistent, and the errors are uncorrelated.  \\
 
-The theoretical validity is carried out by proving the following theorem. 
+The theoretical validity is carried out by proving the following theorem. Compared to the original paper, we have slightly altered the notation for better clarification in the proof, and we also restructured the argument by introducing some additional notation, which makes the logic easier to follow.
 
 \begin{customthm}{1}\label{thm1}
 Suppose that Assumptions \ref{assump1}-\ref{assump3} hold, then we have $\hat{PE} \xrightarrow[]{approx.} PE$. 
@@ -260,7 +260,7 @@ Therefore, since the proof for \textbf{Theorem \ref{thm1}} fundamentally depends
 \end{assumption}
 The martingale difference property for the error term in \textbf{Assumption \ref{assump3}} ensures that the errors are uncorrelated over time, which is important for the consistency and convergence of the cross-validation error estimates. \textbf{Model being misspecified} would cause correlations in the error term and therefore we add this to the adjusted version of \textbf{Assumption \ref{assump1}}, i.e., \textbf{Assumption \ref{assump4}}. \\
 
-In summary, with \textbf{Assumptions \ref{assump2}-\ref{assump4}} (new assumptions refining the original Assumption \ref{assump1}), we now generalize \textbf{Theorem \ref{thm1}} to apply not only to AR(P) models but to any non-linear time series models.
+In summary, with \textbf{Assumptions \ref{assump2}-\ref{assump4}}, we now can generalize \textbf{Theorem \ref{thm1}} to apply not only to AR(p) models but to any non-linear time series models.
 
 
 \subsection{Monte Carlo Simulation and Results}
@@ -368,35 +368,88 @@ Each trial consists of a \textbf{200-length time series}. The first \textbf{70\%
 \end{itemize}
 
 \subsection{Simulation Results}
-In all three experiment, we use AR models with the same lag order as in the data generation process. In these cases, the models are not misspecified. We observed that for all three experiments, all the CV methods outperform $OOS$. When fitting the data without the Lasso term in the regression model, blocked CV provides slightly lower error rates. When fitting the data with the added Lasso term in the regression model, normal CV tends to perform better. \\
+In all three experiment, we use AR models with the same lag order as in the data generation process. We compare the \textbf{MAPAE} and \textbf{MPAE} between $PE$ and $\hat{PE}$ In these cases, the models are not misspecified. We observed that for all three experiments, Blocked CV and Normal CV outperform $LOOCV$ and $OOS$ for \textbf{RMSE} error comparison, and all CV methods outperform $OOS$ for \textbf{MAE} error comparison. When fitting the data without the Lasso term in the regression model, normal CV provides slightly lower error rates. When fitting the data with the added Lasso term in the regression model, blocked CV tends to perform better. \\
 
-Based on the simulation results from all three experiments, our findings align with the theoretical expectation that adding a Lasso regularization term to the objective function does not cause the CV methods to break down. In fact, across all different CV methods, adding a Lasso term in the regression model generally improved the performance. With different $\alpha$ values in the Lasso penalty term, we observe different levels of improvement in accuracy for most fitting scenarios. Typically, in Lasso regression, too small alpha values tend to show very little improvements in prediction accuracy. However, too large alpha values can lead to over-regularization, resulting in under-fitting. The optimal $\alpha$ value here is not being investigated in this study.\\
+Based on the simulation results from all three experiments, our findings align with the theoretical expectation that adding a Lasso regularization term to the objective function does not cause the CV methods to break down. In fact, across most all the methods, we observe different levels of improvement in accuracy for most fitting scenarios with the added Lasso term. Typically, in Lasso regression, too small alpha values tend to show very little improvements in prediction accuracy. However, too large alpha values can lead to over-regularization, resulting in under-fitting. The optimal $\alpha$ value here is not being investigated in this study.\\
 
-The results are presented in tables from Figure \ref{ar3data_ar3} to Figure \ref{ar8data_ar8}. In the result tables, the data is fitted using a regular AR(p) model from rows 1 to 4, an AR(p) Lasso regression model with $\alpha = 0.1$ from row 5 to row 8, an AR(p) Lasso regression model with $\alpha = 0.6$ from row 9 to row 12, and an AR(p) Lasso regression model with $\alpha = 1$ from row 10 to row 16. The minimum error values across  each row are marked in blue. Notice that both \textbf{MAE} and \textbf{RMSE} are scale-dependent metrics, meaning that their values are directly influenced by the scale of the data. If the data has large values, both \textbf{MAE} and \textbf{RMSE} will also tend to be large, and vice versa for small values. Also, be aware that \textbf{MPAE} doesn't accurately reflect the magnitude of the errors, since positive and negative errors can cancel out each other, but it provides a directional bias of the predictions, i.e., whether the model tends to over-predict or under-predict on average. 
+The results are presented in tables from Figure \ref{ar3_table} to Figure \ref{ar8_table}. In the result tables, the data is fitted using a regular AR(p) model from rows 1 to 4, an AR(p) Lasso regression model with $\alpha = 0.1$ from row 5 to row 8, an AR(p) Lasso regression model with $\alpha = 0.6$ from row 9 to row 12, and an AR(p) Lasso regression model with $\alpha = 1$ from row 10 to row 16. The minimum error values across  each row are marked in blue. Notice that both \textbf{MAE} and \textbf{RMSE} are scale-dependent metrics, meaning that their values are directly influenced by the scale of the data. If the data has large values, both \textbf{MAE} and \textbf{RMSE} will also tend to be large, and vice versa for small values. Also, be aware that \textbf{MPAE} doesn't accurately reflect the magnitude of the errors, since positive and negative errors can cancel out each other, but it provides a directional bias of the predictions, i.e., whether the model tends to over-predict or under-predict on average. 
 
 \begin{figure}[hbt!]
     \caption{Experiment 1}
     \centering
-    \includegraphics[scale=0.3]{Figures/ar3data_ar3.jpg}
-    \label{ar3data_ar3}
+    \includegraphics[scale=0.3]{Report/Figures/ar3_table.jpg}
+    \label{ar3_table}
 \end{figure}
 \FloatBarrier
 
 \begin{figure}[hbt!]
     \caption{Experiment 2}
     \centering
-    \includegraphics[scale=0.3]{Figures/ar5data_ar5.jpg}
-    \label{ar5data_ar5}
+    \includegraphics[scale=0.6]{Report/Figures/ar5_table.jpg}
+    \label{ar5_table}
 \end{figure}
 \FloatBarrier
 
 \begin{figure}[hbt!]
     \caption{Experiment 3}
     \centering
-    \includegraphics[scale=0.3]{Figures/ar8data_ar8.jpg}
-    \label{ar8data_ar8}
+    \includegraphics[scale=0.6]{Report/Figures/ar8_table.jpg}
+    \label{ar8_table}
 \end{figure}
 \FloatBarrier
+
+
+In addition to the error comparison table, we created violin plots to illustrate the distribution of absolute errors from 1000 trials, comparing in-set and out-set errors. Each "violin" represents the absolute error distribution between $PE$ and $\hat{PE}$ for specific methods (e.g., $LOOCV$), specific models (e.g., AR(3) Lasso with $\alpha = 0.6$) and specific error measures (\textbf{RMSE} and \textbf{MAE}). The width reflects density, with wider sections indicating more frequent errors, and boxplots inside summarize the error statistics. The blue diamond marks the mean for the AR model, while the red diamond represents the AR Lasso model. The results, shown in Figures \ref{ar3_v1} to \ref{ar8_v2}, indicate that Blocked CV and Normal CV have a higher frequency of errors near zero compared to $LOOCV$ and $OOS$, especially for \textbf{RMSE} over \textbf{MAE}. Additionally, the Lasso term appears most effective in Blocked CV, as seen by the asymmetry in its violin plot.
+
+\begin{figure}[hbt!]
+    \caption{Experiment 1: RMSE between $PE$ and $\hat{PE}$}
+    \centering
+    \includegraphics[scale=0.5]{Report/Figures/ar3_violin_rmse.jpg}
+    \label{ar3_v1}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[hbt!]
+    \caption{Experiment 1: MAE between $PE$ and $\hat{PE}$}
+    \centering
+    \includegraphics[scale=0.5]{Report/Figures/ar3_violin_mae.jpg}
+    \label{ar3_v2}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[hbt!]
+    \caption{Experiment 2: RMSE}
+    \centering
+    \includegraphics[scale=0.5]{Report/Figures/ar5_violin_rmse.jpg}
+    \label{ar5_v1}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[hbt!]
+    \caption{Experiment 2: MAE}
+    \centering
+    \includegraphics[scale=0.5]{Report/Figures/ar5_violin_mae.jpg}
+    \label{ar5_v2}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[hbt!]
+    \caption{Experiment 3: RMSE}
+    \centering
+    \includegraphics[scale=0.5]{Report/Figures/ar8_violin_rmse.jpg}
+    \label{ar8_v1}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[hbt!]
+    \caption{Experiment 3: MAE}
+    \centering
+    \includegraphics[scale=0.41]{Report/Figures/ar8_violin_mae.jpg}
+    \label{ar8_v2}
+\end{figure}
+\FloatBarrier
+
+
 
 
 \subsection{Future Improvements}
