@@ -35,4 +35,4 @@ Runs the AR(p) Lasso regression model fitting on a time series data, and returns
 Performs CV methods with AR(p) and AR(p) Lasso regression models on a time series dataset, with given data partitioning methods (blocked, normal, loocv). 
 
 
-Please run the **_Main execution..._** and **_Create the result matrix..._** blocks to see the result presented in table format. There are detailed explanation in the comments. 
+Please run the **_Main execution..._** and **_Create the result matrix..._** blocks to see the result presented in table format. There are detailed explanation in the comments. Please run the **_Create the violin plots for RMSE..._** and **_Create the violin plots for MAE..._** to see the overall error distribution between $PE$ and $\hat{PE}$ among different methods and models. 
