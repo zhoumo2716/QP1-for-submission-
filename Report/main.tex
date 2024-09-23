@@ -91,7 +91,7 @@ The paper builds on the existing literatures on model evaluation techniques for 
 The main idea is that the prediction error $\hat{PE}$ we get by performing cross validation methods on a data set $\{y_t\}_{t=1}^T$, can approximate the prediction error $PE$ when forecasting on the future data $\{y_t\}_{T+1}^n$ using past data set as the training data.  
 
 \subsection{Theoretical Work}
-The original paper provides a theoretical proof by showing that the prediction error in the in-set data performed by CV is a consistent estimator for the prediction error in the out-set data (the unseen future data). Without loss of generality, the paper focuses on the leave-one-out CV ($LOOCV$) since generalisation to the $K-fold$ CV is straightforward.
+The original paper provides a theoretical proof by showing that the prediction error on the in-set data performed by CV is a consistent estimator for the prediction error on the out-set data (the unseen future data). Without loss of generality, the paper focuses on the leave-one-out CV ($LOOCV$) since generalisation to the $K-fold$ CV is straightforward.
 \\
 
 Let $y_1, y_2, ..., y_n$ be a set of observation data from a stationary process. Let's consider a purely auto-regressive model of order $P$, i.e., AR(p), consider the following nonlinear regression model
@@ -181,18 +181,18 @@ where $F_n$ is the distribution of the process generating $\{y_t\}^n_{t=1}$. Not
    \frac{1}{n-p}\sum_{t=p+1}^n \left( E[g(x_t, \hat{\theta_{-t}})] - g(x_t, \hat{\theta_{-t}}) \right)^2 \xrightarrow{Approxi.} \int \left(E[g(\Tilde{x}, \hat{\theta})] - g(\Tilde{x},\hat{\theta})\right)^2 d\tilde{F_m} 
 \end{equation}
 
-The key takeaway here is that, ultimately, the variance of $PE$ across different training data realizations can be approximated by the variance of $\hat{PE}$ across different training data realizations when the number of data gets very big. When $n, m$ becomes big, let $N = max \{n, m\}$, and let $\epsilon^E_t(\hat{\theta_{-t}}) = E[g(x_t, \hat{\theta_{-t}})] - g(x_t,\hat{\theta_{-t}}), \tilde{\epsilon}^E_t(
+The key takeaway here is that, ultimately, the variance of the true prediction error denoted by $PE$ is consistently estimated by the variance of the cross-validation prediction error $\hat{PE}$, when the number of data gets big. When $n, m$ becomes big, let $N = max \{n, m\}$, and let $\epsilon^E_t(\hat{\theta_{-t}}) = E[g(x_t, \hat{\theta_{-t}})] - g(x_t,\hat{\theta_{-t}}), \tilde{\epsilon}^E_t(
 \hat{\theta}
 ) = E[g(\Tilde{x_t}, \hat{\theta})] - g(\Tilde{x_t},\hat{\theta})$, we can write the left term in equation \ref{equation6} as
 $$  \frac{1}{N-p} \sum_{t=p+1}^N  \left( \epsilon^E_t(\theta_{-t}) \right)^2$$and similarly we can write the right term as $$  \frac{1}{(N-p)^2} \sum_{t=p+1}^N \sum_{j=p+1}^N  \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta})$$
-Our proof is complete if we can show that, as $n$ grows big
-$$E\left[ \sum_{t=p+1}^N \sum_{j=p+1}^N  \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta}) - \sum_{t=p+1}^N  \left( \epsilon^E_t(\theta_{-t}) \right)^2 \right] \rightarrow 0 $$ 
+Our proof is complete if we can show that, as $N$ grows big
+$$E\left[ \sum_{t=p+1}^N \sum_{j=p+1}^N  \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta}) \right]  \approx E\left[\sum_{t=p+1}^N  \left( \epsilon^E_t(\theta_{-t}) \right)^2 \right]  $$ 
 which follows by Lemma \ref{lemma1}. 
 \end{proof}
 
 \newtheorem{lemma}{Lemma}
 \begin{lemma}\label{lemma1}
-    Suppose that \textbf{Assumptions \ref{assump1}-\ref{assump3}} hold. Then, there exists an arbitrarily small constant c \textgreater 0 such that $$E \left[  \sum_{t=p+1}^N \sum_{j=p+1}^N   \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta}) - \sum_{t=p+1}^N  \left( \epsilon^E_t(\theta_{-t}) \right)^2 \right] \leq cN^4$$
+    Suppose that \textbf{Assumptions \ref{assump1}-\ref{assump3}} hold. Then, there exists an arbitrarily small constant c \textgreater 0 such that $$E \left[  \sum_{t=p+1}^N \sum_{j=p+1}^N   \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta}) - \sum_{t=p+1}^N  \left( \epsilon^E_t(\theta_{-t}) \right)^2 \right]^4 \leq cN^4$$
 \end{lemma}
 
 \begin{proof}
@@ -234,15 +234,10 @@ $$\sum^N_{t=p+1, t\not = j} \sum^N_{j=p+1} \tilde{\epsilon}^E_t(\hat{\theta}) \t
 \sum^N_{t=p+2}\tilde{\epsilon}^E_t(\hat{\theta}) 
 \sum^{j < t}_{j=p+1} \tilde{\epsilon}^E_j(\hat{\theta}) \leq cN^4
 $$
-This is because that sum of the off-diagonal elements of the variance-covariance matrix becomes negligible (the impact of the covariance terms becomes negligible) when number of data grows large and the mixing condition we have follows from \textbf{Assumption \ref{assump1}}. And therefore, we have Lemma \ref{lemma1} proved. 
-\end{proof}
-
-
-
-Note that the assumption $\epsilon$ and $\Tilde{\epsilon}$ are stationary martingale difference sequences, plays an important role in the proof. \textbf{Errors are uncorrelated} will be the key component for the success of the cross-validation. In fact, as stated by the authors, the proposed CV method exactly works towards ensuring the uncorrelatedness between residuals.
+This is because that sum of the off-diagonal elements of the variance-covariance matrix becomes negligible (the impact of the covariance terms becomes negligible). Note that both $\{ \tilde{\epsilon}^E_t  \}$ and $\{\epsilon^E_t\}$ are stationary martingale difference sequences, and any linear combination of martingales based on the same filtration is also a martingale. After omitting certain rows and applying the law of iterated expectation, this inequality follows from the proof of Lemma 5.3 in \citep{Burman1992}. And therefore, we have Lemma \ref{lemma1} proved. \end{proof}
 \\
 
-Alternatively, we can understand the proof from the perspective of the Glivenko-Cante's theorem for dependent variables. The theorem stats that the empirical distribution function converges uniformly to the true distribution function for a dependent process, under certain conditions \citep{Doukhan, Bradley}. The set of observations $\{y_t\}_{t=1}^n$ is generated from a stationary and ergotic process by \textbf{Assumption \ref{assump1}}. Due to stationarity, the dependence between observations decays exponentially (i.e the auto-correlations decay exponentially \citep{Takemura2016} for stationary AR processes),  and therefore indicates a $\alpha$-mixing condition \citep{Brockwell}. This was also mentioned by the authors in the original paper. Therefore, the AR(p) process in this case satisfies all conditions needed to apply the dependent version of Glivenko-Cante's theorem. The similar logic follows for $\{\tilde{y_t}\}_{t=1}^m$. Therefore, both $F_n$ and $\tilde{F_m}$ are empirical distribution functions of the observations $\{y_t\}_{t=1}^n$ and $\{\tilde{y_t}\}_{t=1}^m$ from the same underlying AR(p) process that satisfies the stationarity and mixing conditon. By Glivenko-Cante's theorem, they converges uniformly to the true distribution function $F$ as the sample size grows large. In this case, their difference also becomes negligible. 
+Note that \textbf{Errors are uncorrelated} will be the key component for the success of the cross-validation. In fact, as stated by the authors, the proposed CV method exactly works towards ensuring the uncorrelatedness between residuals. Alternatively, we can understand the proof from the perspective of the Glivenko-Cante's theorem for dependent variables. The theorem stats that the empirical distribution function converges uniformly to the true distribution function for a dependent process, under certain conditions \citep{Doukhan, Bradley}. The set of observations $\{y_t\}_{t=1}^n$ is generated from a stationary and ergotic process by \textbf{Assumption \ref{assump1}}. Due to stationarity, the dependence between observations decays exponentially (i.e the auto-correlations decay exponentially \citep{Takemura2016} for stationary AR processes),  and therefore indicates a $\alpha$-mixing condition \citep{Brockwell}. This was also mentioned by the authors in the original paper. Therefore, the AR(p) process in this case satisfies all conditions needed to apply the dependent version of Glivenko-Cante's theorem. The similar logic follows for $\{\tilde{y_t}\}_{t=1}^m$. Therefore, both $F_n$ and $\tilde{F_m}$ are empirical distribution functions of the observations $\{y_t\}_{t=1}^n$ and $\{\tilde{y_t}\}_{t=1}^m$ from the same underlying AR(p) process that satisfies the stationarity and mixing conditon. By Glivenko-Cante's theorem, they converges uniformly to the true distribution function $F$ as the sample size grows large. 
 
 \subsection{Generalization of Theorem 1}
 Notice that in the proof, we did not rely on any specific properties of the AR(p) model itself. Instead, what truly matters in the \textbf{Assumption \ref{assump1}} are the stationarity of the process and the alpha-mixing condition, which can be extended to a
@@ -399,7 +394,7 @@ The results are presented in tables from Figure \ref{ar3_table} to Figure \ref{a
 \FloatBarrier
 
 
-In addition to the error comparison table, we created violin plots to illustrate the distribution of absolute errors from 1000 trials, comparing in-set and out-set errors. Each "violin" represents the absolute error distribution between $PE$ and $\hat{PE}$ for specific methods (e.g., $LOOCV$), specific models (e.g., AR(3) Lasso with $\alpha = 0.6$) and specific error measures (\textbf{RMSE} and \textbf{MAE}). The width reflects density, with wider sections indicating more frequent errors, and boxplots inside summarize the error statistics. The blue diamond marks the mean for the AR model, while the red diamond represents the AR Lasso model. The results, shown in Figures \ref{ar3_v1} to \ref{ar8_v2}, indicate that Blocked CV and Normal CV have a higher frequency of errors near zero compared to $LOOCV$ and $OOS$, especially for \textbf{RMSE} over \textbf{MAE}. Additionally, the Lasso term appears most effective in Blocked CV, as seen by the asymmetry in its violin plot.
+In addition to the error comparison table, we created violin plots to illustrate the distribution of absolute errors from 1000 trials; the absolute error here means the absolute difference between in-set errors and out-set errors. Each "violin" represents the absolute error distribution between $PE$ and $\hat{PE}$ for specific methods (e.g., $LOOCV$), specific models (e.g., AR(3) Lasso with $\alpha = 0.6$) and specific error measures (\textbf{RMSE} and \textbf{MAE}). The width reflects density, with wider sections indicating more frequent errors, and boxplots inside summarize the error statistics. The blue diamond marks the mean for the AR model, while the red diamond represents the AR Lasso model. The results, shown in Figures \ref{ar3_v1} to \ref{ar8_v2}, indicate that Blocked CV and Normal CV have a higher frequency of errors near zero compared to $LOOCV$ and $OOS$, especially for \textbf{RMSE} over \textbf{MAE}. Additionally, the Lasso term appears most effective in Blocked CV, as seen by the asymmetry in its violin plot.
 
 \begin{figure}[hbt!]
     \caption{Experiment 1: RMSE between $PE$ and $\hat{PE}$}
