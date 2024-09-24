@@ -206,33 +206,37 @@ By adding and subtracting the expectation terms, we can express (part 1) of the 
     \sum_{t=p+1}^N (\tilde{\epsilon}^E_t(\hat{\theta}))^2 - \sum_{t=p+1}^N ( \epsilon^E_t(\hat{\theta_{-t}})) ^2 
     & = \sum_{t=p+1}^N \left( (\tilde{\epsilon}^E_t(\hat{\theta}))^2 - E[(\tilde{\epsilon}^E_t(\hat{\theta}))^2] \right) \\
     &- \sum_{t=p+1}^N \left( ( \epsilon^E_t(\hat{\theta_{-t}}))^2 - E[( \epsilon^E_t(\hat{\theta_{-t}}))^2] \right) \\
-    &+ \sum^N_{t=p+1} \left( E[(\tilde{\epsilon}^E_t(\hat{\theta}))^2] - E[( \epsilon^E_t(\hat{\theta_{-t}}))^2] \right) \\
-    & \leq cN^2
+    &+ \sum^N_{t=p+1} \left( E[(\tilde{\epsilon}^E_t(\hat{\theta}))^2] - E[( \epsilon^E_t(\hat{\theta_{-t}}))^2] \right)
 \end{align*}
-This is because that the summations here are martingale difference sequences (\textbf{Assumption \ref{assump3}}). Therefore by Burkholder's inequality, we have 
+Notice that summations here are martingale difference sequences (by \textbf{Assumption \ref{assump3}}). Therefore by Burkholder's inequality, we have 
 $$ E \Bigg|
 \sum_{t=p+1}^N \left( (\tilde{\epsilon}^E_t(\hat{\theta}))^2 - E[(\tilde{\epsilon}^E_t(\hat{\theta}))^2] \right) \Bigg| ^4 \leq 
- c * E \Bigg|
+ cE \Bigg|
 \sum_{t=p+1}^N \left( (\tilde{\epsilon}^E_t(\hat{\theta}))^2 - E[(\tilde{\epsilon}^E_t(\hat{\theta}))^2] \right)^2 \Bigg| ^2 \leq cN^2 $$
 
 $$ E \Bigg|
 \sum_{t=p+1}^N \left( ( \epsilon^E_t(\hat{\theta_{-t}}))^2 - E[( \epsilon^E_t(\hat{\theta_{-t}}))^2] \right) \Bigg| ^4 \leq 
- c * E \Bigg|
+ cE \Bigg|
 \sum_{t=p+1}^N \left( ( \epsilon^E_t(\hat{\theta_{-t}}))^2 - E[( \epsilon^E_t(\hat{\theta_{-t}}))^2] \right)^2 \Bigg| ^2 \leq cN^2
 $$
 
 $$ E \Bigg|
 \sum_{t=p+1}^N \left( E[(\tilde{\epsilon}^E_t(\hat{\theta}))^2] - E[( \epsilon^E_t(\hat{\theta_{-t}}))^2] \right) \Bigg| ^4 \leq 
- c * E \Bigg|
+ cE \Bigg|
 \sum_{t=p+1}^N \left( E[(\tilde{\epsilon}^E_t(\hat{\theta}))^2] - E[( \epsilon^E_t(\hat{\theta_{-t}}))^2] \right)^2 \Bigg| ^2 \leq cN^2
 $$
 
 For the (part 2) of the equation, due to the symmetry of a covariance matrix, we can express it as
 $$\sum^N_{t=p+1, t\not = j} \sum^N_{j=p+1} \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta}) = 2 
 \sum^N_{t=p+2}\tilde{\epsilon}^E_t(\hat{\theta}) 
-\sum^{j < t}_{j=p+1} \tilde{\epsilon}^E_j(\hat{\theta}) \leq cN^4
+\sum^{j < t}_{j=p+1} \tilde{\epsilon}^E_j(\hat{\theta})
 $$
-This is because that sum of the off-diagonal elements of the variance-covariance matrix becomes negligible (the impact of the covariance terms becomes negligible). Note that both $\{ \tilde{\epsilon}^E_t  \}$ and $\{\epsilon^E_t\}$ are stationary martingale difference sequences, and any linear combination of martingales based on the same filtration is also a martingale. After omitting certain rows and applying the law of iterated expectation, this inequality follows from the proof of Lemma 5.3 in \citep{Burman1992}. And therefore, we have Lemma \ref{lemma1} proved. \end{proof}
+Notice that sum of the off-diagonal elements of the variance-covariance matrix becomes negligible (the impact of the covariance terms becomes negligible). 
+$$E \left[ \sum^N_{t=p+1, t\not = j} \sum^N_{j=p+1} \tilde{\epsilon}^E_t(\hat{\theta}) \tilde{\epsilon}^E_j(\hat{\theta}) \right]^4 = 2 E \left[
+\sum^N_{t=p+2}\tilde{\epsilon}^E_t(\hat{\theta}) 
+\sum^{j < t}_{j=p+1} \tilde{\epsilon}^E_j(\hat{\theta}) \right]^4 \leq cN^4
+$$
+Both $\{ \tilde{\epsilon}^E_t  \}$ and $\{\epsilon^E_t\}$ are stationary martingale difference sequences, and any linear combination of martingales based on the same filtration is also a martingale. After omitting certain rows and applying the law of iterated expectation, this inequality follows from the proof of Lemma 5.3 in \citep{Burman1992}. And therefore, we have Lemma \ref{lemma1} proved. \end{proof}
 \\
 
 Note that \textbf{Errors are uncorrelated} will be the key component for the success of the cross-validation. In fact, as stated by the authors, the proposed CV method works exactly towards ensuring the uncorrelatedness between residuals. Alternatively, we can understand the proof from the perspective of the Glivenko-Cante's theorem in dependent setting. The theorem states that the empirical distribution function converges uniformly to the true distribution function under certain conditions \citep{Doukhan, Bradley}. In our case, the set of observations $\{y_t\}_{t=1}^n$ is generated from a stationary and ergotic process by \textbf{Assumption \ref{assump1}}. Due to stationarity, the dependence between observations decays exponentially (i.e the auto-correlations decay exponentially \citep{Takemura2016} for stationary AR processes),  and therefore indicates a $\alpha$-mixing condition \citep{Brockwell}. This was also mentioned by the authors in the original paper. Therefore, the data process in this case satisfies all conditions needed to apply the dependent version of Glivenko-Cante's theorem. Similar logic follows for $\{\tilde{y_t}\}_{t=1}^m$. Therefore, both $F_n$ and $\tilde{F_m}$ are empirical distribution functions of the observations $\{y_t\}_{t=1}^n$ and $\{\tilde{y_t}\}_{t=1}^m$ from the same underlying AR(p) process that satisfies the stationarity and mixing condition. By Glivenko-Cante's theorem, they converges uniformly to the true distribution function $F$ as the sample size grows large. 
